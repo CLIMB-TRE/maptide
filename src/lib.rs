@@ -13,14 +13,8 @@ use std::fs::File;
 mod error;
 use error::MapTideError;
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
+#[derive(IntoPyObject, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy)]
 struct Coordinate(usize, usize);
-
-impl IntoPy<PyObject> for Coordinate {
-    fn into_py(self, py: Python<'_>) -> PyObject {
-        (self.0, self.1).into_py(py)
-    }
-}
 
 impl From<MapTideError> for PyErr {
     fn from(e: MapTideError) -> Self {
@@ -379,7 +373,7 @@ fn merge_into_base_map(
     Ok(ins_maps)
 }
 
-#[pyfunction]
+#[pyfunction(signature = (bam_path, mapping_quality, base_quality))]
 fn all(bam_path: String, mapping_quality: usize, base_quality: usize) -> PyResult<MapTide> {
     // Create initial maps
     let (mut ref_arrs, mut ins_maps, mut ref_lengths) = init_maps();
@@ -450,7 +444,7 @@ fn all(bam_path: String, mapping_quality: usize, base_quality: usize) -> PyResul
     Ok(base_map)
 }
 
-#[pyfunction]
+#[pyfunction(signature = (bam_path, bai_path, region, mapping_quality, base_quality))]
 fn query(
     bam_path: String,
     bai_path: Option<String>,
@@ -571,7 +565,7 @@ fn query(
     Ok(base_map)
 }
 
-#[pyfunction]
+#[pyfunction(signature = (region))]
 fn parse_region(region: String) -> PyResult<(String, Option<usize>, Option<usize>)> {
     let region: Region = region
         .parse()
@@ -591,7 +585,7 @@ fn parse_region(region: String) -> PyResult<(String, Option<usize>, Option<usize
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn maptide(_py: Python, m: &PyModule) -> PyResult<()> {
+fn maptide(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(all, m)?)?;
     m.add_function(wrap_pyfunction!(query, m)?)?;
     m.add_function(wrap_pyfunction!(parse_region, m)?)?;
