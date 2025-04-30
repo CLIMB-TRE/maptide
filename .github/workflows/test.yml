@@ -1,8 +1,14 @@
 name: Run Tests
 
 on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "*"
   pull_request:
-    branches: ["*"]
+  workflow_dispatch:
 
 jobs:
   test:
