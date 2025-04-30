@@ -2,6 +2,7 @@
 name = "maptide"
 version = "0.3.0"
 edition = "2021"
+rust-version = "1.63"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
