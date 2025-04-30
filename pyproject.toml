@@ -11,7 +11,7 @@ maintainers = [{ name = "Thomas Brier", email = "t.o.brier@bham.ac.uk" }]
 description = "Base frequencies for BAM files"
 readme = "README.md"
 license = "MIT"
-license-files = ["LICEN[CS]E.*"]
+license-files = ["LICENCSE"]
 keywords = ["bioinformatics", "pileup", "base-frequency"]
 classifiers = [
     "License :: OSI Approved :: MIT License",
