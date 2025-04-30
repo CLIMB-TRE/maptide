@@ -2,7 +2,7 @@ import argparse
 import math
 import sys
 import csv
-import pkg_resources
+from importlib.metadata import version
 from . import api
 
 
@@ -60,7 +60,7 @@ def run():
         "-v",
         "--version",
         action="version",
-        version=pkg_resources.get_distribution("maptide").version,
+        version=version("maptide"),
     )
     parser.add_argument(
         "-r",
