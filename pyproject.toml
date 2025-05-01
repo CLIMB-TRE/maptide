@@ -1,18 +1,32 @@
 [build-system]
-requires = ["maturin>=0.14,<0.15"]
+requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
 
 [project]
 name = "maptide"
-requires-python = ">=3.7"
+dynamic = ["version"]
+requires-python = ">=3.9"
+authors = [{ name = "Thomas Brier", email = "t.o.brier@bham.ac.uk" }]
+maintainers = [{ name = "Thomas Brier", email = "t.o.brier@bham.ac.uk" }]
+description = "Base frequencies for BAM files"
+readme = "README.md"
+license = "MIT"
+keywords = ["bioinformatics", "pileup", "base-frequency"]
 classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Rust",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
 ]
 
 [project.scripts]
 maptide = "maptide.cli:run"
+
+[project.urls]
+repository = "https://github.com/CLIMB-COVID/maptide"
 
 [tool.maturin]
 python-source = "python"
