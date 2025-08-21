@@ -17,11 +17,10 @@ Installation instructions for the Rust compiler can be found here: https://www.r
 Once the Rust compiler is installed:
 
 ```
-$ git clone https://github.com/CLIMB-COVID/maptide.git
+$ git clone https://github.com/CLIMB-TRE/maptide.git
 $ cd maptide/
 $ python -m venv .venv
 $ source .venv/bin/activate
-$ pip install --upgrade pip
 $ pip install .
 ```
 
