@@ -466,7 +466,7 @@ fn all(
     Ok(base_map)
 }
 
-#[pyfunction(signature = (bam_path, bai_path, region, mapping_quality, base_quality))]
+#[pyfunction(signature = (bam_path, bai_path, region, mapping_quality, base_quality, supplementary, secondary, qc_fail, duplicate))]
 fn query(
     bam_path: String,
     bai_path: Option<String>,
