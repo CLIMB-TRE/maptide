@@ -1,27 +1,31 @@
 # `maptide`
 
 ## Setup
-#### Install via pip
+
+### Install via pip
+
 ```
 $ pip install maptide
 ```
 
-#### Build from source
+### Build from source
+
 Building from source requires the Rust compiler.
 
 Installation instructions for the Rust compiler can be found here: https://www.rust-lang.org/tools/install
 
 Once the Rust compiler is installed:
+
 ```
-$ git clone https://github.com/CLIMB-COVID/maptide.git
+$ git clone https://github.com/CLIMB-TRE/maptide.git
 $ cd maptide/
-$ python -m venv env
-$ source env/bin/activate
-$ pip install --upgrade pip
+$ python -m venv .venv
+$ source .venv/bin/activate
 $ pip install .
 ```
 
 ## Usage
+
 ```
 $ maptide -h
 usage: maptide [-h] [-v] [-r REGION] [-i INDEX] [-m MAPPING_QUALITY] [-b BASE_QUALITY] [-s] [-d DECIMALS] bam
@@ -45,25 +49,30 @@ options:
                         Number of decimal places to display (default: 3)
 ```
 
-#### Frequencies over all positions
+### Frequencies over all positions
+
 ```
 $ maptide /path/to/file.bam
 ```
 
-#### Frequencies over a region
+### Frequencies over a region
+
 ```
 $ maptide /path/to/file.bam --region chrom:start-end
 ```
+
 If a region is specified, `maptide` will check for an index file with the same path as the BAM file, but with `.bai` appended on the end (i.e. `/path/to/file.bam.bai`).
 
 If an index file does not exist in this location, `maptide` will still run anyway, just without an index file.
 
 Index files that do not follow the naming convention `/path/to/file.bam.bai` can still be used, but a path to the file needs to be provided:
+
 ```
 $ maptide /path/to/file.bam --region chrom:start-end --index /path/to/index.bai
 ```
 
-#### Example in Python
+### Example in Python
+
 `maptide` can be used within Python scripts:
 
 ```python
