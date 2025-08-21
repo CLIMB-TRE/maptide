@@ -373,8 +373,36 @@ fn merge_into_base_map(
     Ok(ins_maps)
 }
 
-#[pyfunction(signature = (bam_path, mapping_quality, base_quality))]
-fn all(bam_path: String, mapping_quality: usize, base_quality: usize) -> PyResult<MapTide> {
+/// Get flags for filtering records.
+fn get_flags(supplementary: bool, secondary: bool, qc_fail: bool, duplicate: bool) -> Flags {
+    // Unmapped flag is always set
+    let mut flags = Flags::UNMAPPED;
+
+    if supplementary {
+        flags |= Flags::SUPPLEMENTARY;
+    }
+    if secondary {
+        flags |= Flags::SECONDARY;
+    }
+    if qc_fail {
+        flags |= Flags::QC_FAIL;
+    }
+    if duplicate {
+        flags |= Flags::DUPLICATE;
+    }
+    flags
+}
+
+#[pyfunction(signature = (bam_path, mapping_quality, base_quality, supplementary, secondary, qc_fail, duplicate))]
+fn all(
+    bam_path: String,
+    mapping_quality: usize,
+    base_quality: usize,
+    supplementary: bool,
+    secondary: bool,
+    qc_fail: bool,
+    duplicate: bool,
+) -> PyResult<MapTide> {
     // Create initial maps
     let (mut ref_arrs, mut ins_maps, mut ref_lengths) = init_maps();
 
@@ -393,13 +421,7 @@ fn all(bam_path: String, mapping_quality: usize, base_quality: usize) -> PyResul
     init_coordinates(&mut ref_arrs, &mut ins_maps, &ref_lengths, None)?;
 
     // Define flags for filtering records
-    let flags = Flags::from(
-        Flags::UNMAPPED.bits()
-            + Flags::SUPPLEMENTARY.bits()
-            + Flags::SECONDARY.bits()
-            + Flags::QC_FAIL.bits()
-            + Flags::DUPLICATE.bits(),
-    );
+    let flags = get_flags(!supplementary, !secondary, !qc_fail, !duplicate);
 
     for result in reader.records() {
         let record = result?;
@@ -444,13 +466,17 @@ fn all(bam_path: String, mapping_quality: usize, base_quality: usize) -> PyResul
     Ok(base_map)
 }
 
-#[pyfunction(signature = (bam_path, bai_path, region, mapping_quality, base_quality))]
+#[pyfunction(signature = (bam_path, bai_path, region, mapping_quality, base_quality, supplementary, secondary, qc_fail, duplicate))]
 fn query(
     bam_path: String,
     bai_path: Option<String>,
     region: String,
     mapping_quality: usize,
     base_quality: usize,
+    supplementary: bool,
+    secondary: bool,
+    qc_fail: bool,
+    duplicate: bool,
 ) -> PyResult<MapTide> {
     // Create initial maps
     let (mut ref_arrs, mut ins_maps, mut ref_lengths) = init_maps();
@@ -490,13 +516,7 @@ fn query(
     init_coordinates(&mut ref_arrs, &mut ins_maps, &ref_lengths, Some(&region))?;
 
     // Define flags for filtering records
-    let flags = Flags::from(
-        Flags::UNMAPPED.bits()
-            + Flags::SUPPLEMENTARY.bits()
-            + Flags::SECONDARY.bits()
-            + Flags::QC_FAIL.bits()
-            + Flags::DUPLICATE.bits(),
-    );
+    let flags = get_flags(!supplementary, !secondary, !qc_fail, !duplicate);
 
     let (ref_arr, offset) = ref_arrs
         .get_mut(region_name)
