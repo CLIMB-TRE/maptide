@@ -1,8 +1,8 @@
-# `maptide`
+# Maptide
 
 ## Setup
 
-### Install via pip
+### Install via [PyPI](https://pypi.org/project/maptide/)
 
 ```
 $ pip install maptide
