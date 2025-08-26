@@ -2,7 +2,14 @@
 
 ## Setup
 
-### Install via [PyPI](https://pypi.org/project/maptide/)
+### Install from [conda-forge](https://anaconda.org/conda-forge/maptide)
+
+```
+$ conda create --name maptide --channel conda-forge maptide
+```
+
+
+### Install from [PyPI](https://pypi.org/project/maptide/)
 
 ```
 $ pip install maptide
