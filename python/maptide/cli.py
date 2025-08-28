@@ -101,7 +101,7 @@ def run():
         help="Number of decimal places to display (default: %(default)s)",
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(None if sys.argv[1:] else ['-h'])
 
     columns = [
         "chrom",
