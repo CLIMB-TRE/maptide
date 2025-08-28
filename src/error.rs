@@ -16,6 +16,7 @@ pub enum MapTideError {
     ReferenceSequenceIDNotFound,
     IOError(io::Error),
     ParseError(region::ParseError),
+    Error(String),
 }
 
 impl From<io::Error> for MapTideError {
@@ -44,6 +45,7 @@ impl Display for MapTideError {
             MapTideError::ReferenceSequenceIDNotFound => f.write_str("ReferenceSequenceIDNotFound"),
             MapTideError::IOError(ref _e) => f.write_str("IOError"),
             MapTideError::ParseError(ref _e) => f.write_str("ParseError"),
+            MapTideError::Error(ref msg) => f.write_str(msg),
         }
     }
 }
