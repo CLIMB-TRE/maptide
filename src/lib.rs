@@ -7,6 +7,7 @@ use noodles::sam::record::sequence::{Base, Sequence};
 use noodles::sam::record::{Flags, QualityScores};
 use pyo3::exceptions::{PyException, PyIOError, PyIndexError, PyKeyError, PyOverflowError};
 use pyo3::prelude::*;
+use regex::Regex;
 use std::collections::HashMap;
 use std::fs::File;
 
@@ -373,6 +374,25 @@ fn merge_into_base_map(
     Ok(ins_maps)
 }
 
+/// Validate that the `region` is one of the formats: `CHROM`, `CHROM:START` `CHROM:START-END`.
+fn validate_region(region: &str) -> Result<(), MapTideError> {
+    // First group: one or more non-colon characters (chromosome name)
+    // Second group (optional):
+    //   A colon
+    //   Third group (optional): one or more digits (start position)
+    //   Fourth group (optional): a hyphen
+    //   Fifth group (optional): one or more digits (end position)
+    let re = Regex::new(r"^([^:]+)(:(\d+)?(-)?(\d+)?)?$").unwrap();
+    if !re.is_match(region) {
+        return Err(MapTideError::Error(format!(
+            "invalid region: '{}' is not one of the supported formats: CHROM, CHROM:START, CHROM:START-END",
+            region
+        )));
+    } else {
+        Ok(())
+    }
+}
+
 #[pyfunction(signature = (bam_path, mapping_quality, base_quality))]
 fn all(bam_path: String, mapping_quality: usize, base_quality: usize) -> PyResult<MapTide> {
     // Create initial maps
@@ -467,6 +487,7 @@ fn query(
     }
 
     // Parse region
+    validate_region(&region)?;
     let region: Region = region
         .parse()
         .map_err(|x: ParseError| PyException::new_err(x.to_string()))?;
@@ -567,6 +588,7 @@ fn query(
 
 #[pyfunction(signature = (region))]
 fn parse_region(region: String) -> PyResult<(String, Option<usize>, Option<usize>)> {
+    validate_region(&region)?;
     let region: Region = region
         .parse()
         .map_err(|x: ParseError| PyException::new_err(x.to_string()))?;
