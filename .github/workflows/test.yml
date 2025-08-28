@@ -29,4 +29,5 @@ jobs:
           python -m pip install .
       - name: Test CLI
         run: |
+          maptide
           maptide --help
