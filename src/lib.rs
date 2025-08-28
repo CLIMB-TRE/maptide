@@ -384,10 +384,10 @@ fn validate_region(region: &str) -> Result<(), MapTideError> {
     //   Fifth group (optional): one or more digits (end position)
     let re = Regex::new(r"^([^:]+)(:(\d+)?(-)?(\d+)?)?$").unwrap();
     if !re.is_match(region) {
-        return Err(MapTideError::Error(format!(
+        Err(MapTideError::Error(format!(
             "invalid region: '{}' is not one of the supported formats: CHROM, CHROM:START, CHROM:START-END",
             region
-        )));
+        )))
     } else {
         Ok(())
     }
